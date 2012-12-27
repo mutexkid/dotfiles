@@ -22,4 +22,3 @@ brew install fontforge
 brew install tmux
 brew install qt
 brew install reattach-to-user-namespace
-brew install ffmpeg
