@@ -14,3 +14,4 @@ set-window-option -g mode-keys vi
 #theming
 set-option -g status-bg colour235
 set-option -g status-fg colour255
+set-window-option -g automatic-rename off

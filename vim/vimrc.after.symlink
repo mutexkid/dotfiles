@@ -222,4 +222,5 @@ endfunction
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 "vimslime
 let g:slime_target = "tmux"
-
+"autoopen current buffer in nerdtree pane
+map <leader>r :NERDTreeFind<cr>
