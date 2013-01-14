@@ -152,11 +152,24 @@ nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" PROMOTE VARIABLE TO RSPEC LET
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! PromoteToLet()
+  :normal! dd
+  :normal! P
+  :.s/\(\w\+\) = \(.*\)$/let(:\1) { \2 }/
+  :normal ==
+endfunction
+:command! PromoteToLet :call PromoteToLet()
+:noremap <leader>p :PromoteToLet<cr>
+
+
 "------------------------"
 "NERDTREE PLUGIN SETTINGS
 "------------------------"
 "Shortcut for NERDTreeToggle
-nmap ,nt :NERDTreeToggle
+nmap ,nt :NERDTreeToggle<cr>
 
 "Show hidden files in NerdTree
 let NERDTreeShowHidden=1
@@ -200,11 +213,34 @@ else
     set mouse=a
 endif
 
+nmap g/ :Ack!
+nmap g* :Ack! -w <C-R><C-W>
+nmap gA :AckAdd!
+nmap gn :cnext<cr>
+nmap gp :cprev<cr>
+nmap gc :ccl<cr>
+"swap windows
+nmap gS <C-W><C-R>
+"close all other open windows
+nmap gW :only<cr>
 " Yank text to the OS X clipboard
 set clipboard=unnamed
 
+" Tab mappings.
+map <Leader>tt :tabnew<cr>
+map <Leader>te :tabe %%
+map <Leader>tc :tabclose<cr>
+map <Leader>to :tabonly<cr>
+map <Leader>tn :tabnext<cr>
+map <Leader>tp :tabprevious<cr>
+map <Leader>tf :tabfirst<cr>
+map <Leader>tl :tablast<cr>
+map <Leader>tm :tabmove
+
+"clear up whitespace
+nmap <leader>s :%s/\s\+$//<CR>
 " Preserve indentation while pasting text from the OS X clipboard
-noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
+"noremap <leader>p :set paste<CR>:put  *<CR>:set nopaste<CR>
 
 " A fancy status bar
 let g:Powerline_symbols = 'fancy'
@@ -220,7 +256,52 @@ function! <SID>StripTrailingWhitespaces()
   call cursor(l, c)
 endfunction
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
-"vimslime
-let g:slime_target = "tmux"
+
 "autoopen current buffer in nerdtree pane
 map <leader>r :NERDTreeFind<cr>
+set cpoptions=$
+nnoremap <leader><leader> <c-^>
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,.idea,*/.git/*,*/.hg/*,*/.svn/*
+set noerrorbells
+set novisualbell
+set autoread
+set title
+"backups
+set nobackup
+set nowritebackup
+set tags=./tmp/tags,./tags,tags
+set backupdir=~/.vim/_backup//
+set directory=~/.vim/_temp//
+set ttyfast
+let g:ctrlp_working_path_mode = 0 " don't manage working directory
+let g:ctrlp_jump_to_buffer = 0 " disable jumping to already open buffer
+"save before running tests
+let g:vroom_write_all = 1
+
+"tabularize
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a{ :Tabularize /{<CR>
+vmap <Leader>a{ :Tabularize /{<CR>
+nmap <Leader>a: :Tabularize /:\zs<CR>
+vmap <Leader>a: :Tabularize /:\zs<CR>
+nmap <Leader>a, :Tabularize /,\zs<CR>
+vmap <Leader>a, :Tabularize /,\zs<CR>
+nmap <Leader>a> :Tabularize /=><CR>
+vmap <Leader>a> :Tabularize /=><CR>
+nmap <Leader>a\| :Tabularize /\|<CR>
+vmap <Leader>a\| :Tabularize /\|<CR>
+"clear the search
+nmap <silent> <Leader>h :silent :nohlsearch<CR>
+"open ctag in new tab
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+inoremap $t <><esc>i
+inoremap jj <Esc>
+nnoremap <silent> zj o<Esc>
+nnoremap <silent> zk O<Esc>
