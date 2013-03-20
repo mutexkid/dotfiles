@@ -45,3 +45,4 @@ rvm use 1.9.3>/dev/null
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 # reload rvm conf for new tmux shells
 cd ..;1
+export ANDROID_HOME=/Users/joshskeen/android-sdks
