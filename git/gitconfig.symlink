@@ -6,15 +6,18 @@
 [hub]
         protocol = https
 [user]
-        name = Josh Skeen 
-        email = josh@joshskeen.com 
+	name = Josh Skeen
+	email = josh@joshskeen.com
         helper = osxkeychain
 [alias]
+        l = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
         co = checkout
         promote = !$ZSH/bin/git-promote
         wtf     = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
         count   = !git shortlog -sn
+      hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+      shit = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short -15
 [color]
         diff = auto
         status = auto
@@ -30,12 +33,12 @@
 [difftool]
         prompt = false
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/p4merge.app/Contents/MacOS/p4merge \"$BASE\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 	trustExitCode = true
-        
+
 [help]
         autocorrect = 1
 [github]
