@@ -34,7 +34,7 @@ plugins=(git ghist)
 
 
 # Customize to your needs...
-export PATH=~/.rvm/gems/ruby-1.9.3-p194/bin:~/.rvm/gems/ruby-1.9.3-p194@global/bin:~/.rvm/rubies/ruby-1.9.3-p194/bin:~/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
+export PATH=~/.rvm/gems/ruby-1.9.3-p194/bin:~/.rvm/gems/ruby-1.9.3-p194@global/bin:~/.rvm/rubies/ruby-1.9.3-p194/bin:~/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/joshskeen/libs/eb/macosx/python2.7:~/bin/
 
 PATH=/usr/local/bin:$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.

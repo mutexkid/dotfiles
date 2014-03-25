@@ -305,3 +305,8 @@ inoremap $t <><esc>i
 inoremap jj <Esc>
 nnoremap <silent> zj o<Esc>
 nnoremap <silent> zk O<Esc>
+noremap <c-s-up> :call feedkeys( line('.')==1 ? '' : 'ddkP' )<CR>
+noremap <c-s-down> ddp
+vmap <C-c> :w! ~/.vbuf<CR>
+nmap <C-c> :.w! ~/.vbuf<CR>
+nmap <C-v> :r ~/.vbuf<CR>
