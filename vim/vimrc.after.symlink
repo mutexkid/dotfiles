@@ -1,5 +1,5 @@
 set nocompatible
-map cc :w !pbcopy
+map cc :w !pbcopy<cr>
 
 "Enable filetypes
 filetype on
@@ -94,7 +94,7 @@ abbrev ff :! open -a firefox.app %:p<cr>
 nmap ,d :cd ~/Desktop<cr>:e.<cr>
 
 "Shortcut for editing  vimrc file in a new tab
-nmap ,ev :tabedit $MYVIMRC<cr>
+nmap ,ev :tabedit ~/.vimrc.after<cr>
 
 "Change zen coding plugin expansion key to shift + e
 let g:user_zen_expandabbr_key = '<C-e>'
@@ -144,6 +144,7 @@ vmap <C-Down> xp`[V`]
 " Vim to see the changes.
 if has("autocmd")
   autocmd bufwritepost .vimrc source $MYVIMRC
+  filetype indent on
 endif
 "
 " easier window navigation
@@ -235,7 +236,8 @@ map <Leader>tn :tabnext<cr>
 map <Leader>tp :tabprevious<cr>
 map <Leader>tf :tabfirst<cr>
 map <Leader>tl :tablast<cr>
-map <Leader>tm :tabmove
+"check syntax
+map <Leader><F8> :w !ruby -c<cr>
 
 "clear up whitespace
 nmap <leader>s :%s/\s\+$//<CR>
@@ -257,6 +259,7 @@ function! <SID>StripTrailingWhitespaces()
 endfunction
 autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>"
 "autoopen current buffer in nerdtree pane
 map <leader>r :NERDTreeFind<cr>
 set cpoptions=$
@@ -277,7 +280,8 @@ let g:ctrlp_working_path_mode = 0 " don't manage working directory
 let g:ctrlp_jump_to_buffer = 0 " disable jumping to already open buffer
 "save before running tests
 let g:vroom_write_all = 1
-
+let g:vroom_map_keys = 0
+map <Leader><F9> :VroomRunTestFile<CR>
 "tabularize
 nmap <Leader>a= :Tabularize /=<CR>
 vmap <Leader>a= :Tabularize /=<CR>
@@ -293,6 +297,8 @@ nmap <Leader>a\| :Tabularize /\|<CR>
 vmap <Leader>a\| :Tabularize /\|<CR>
 "clear the search
 nmap <silent> <Leader>h :silent :nohlsearch<CR>
+"update ctags
+map <Leader><F6>:!ctags -R -f ./.git/tags .<CR>
 "open ctag in new tab
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 inoremap $1 ()<esc>i
@@ -310,3 +316,7 @@ noremap <c-s-down> ddp
 vmap <C-c> :w! ~/.vbuf<CR>
 nmap <C-c> :.w! ~/.vbuf<CR>
 nmap <C-v> :r ~/.vbuf<CR>
+vmap <silent> ,y y:new<CR>:call setline(1,getregtype())<CR>o<Esc>P:wq! ~/reg.txt<CR>
+nmap <silent> ,y :new<CR>:call setline(1,getregtype())<CR>o<Esc>P:wq! ~/reg.txt<CR>
+map <silent> ,p :sview ~/reg.txt<CR>"zdddG:q!<CR>:call setreg('"', @", @z)<CR>p
+map <silent> ,P :sview ~/reg.txt<CR>"zdddG:q!<CR>:call setreg('"', @", @z)<CR>P

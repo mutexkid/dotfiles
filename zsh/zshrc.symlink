@@ -30,20 +30,21 @@ ZSH_THEME="maran"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ghist)
+plugins=(git ghist z)
 
 
 # Customize to your needs...
-export PATH=~/.rvm/gems/ruby-1.9.3-p194/bin:~/.rvm/gems/ruby-1.9.3-p194@global/bin:~/.rvm/rubies/ruby-1.9.3-p194/bin:~/.rvm/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/joshskeen/libs/eb/macosx/python2.7:~/bin/
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Users/joshskeen/libs/eb/macosx/python2.7:~/bin/
 
-PATH=/usr/local/bin:$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
-
+/Users/joshskeen/.oh-my-zsh/plugins/z/z.sh
 source $ZSH/oh-my-zsh.sh
-rvm use 1.9.3>/dev/null
+source /Users/joshskeen/.oh-my-zsh/plugins/z/z.sh
 . ~/nvm/nvm.sh
 PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 # reload rvm conf for new tmux shells
 cd ..;1
 export ANDROID_HOME=/Users/joshskeen/android-sdks
-. /Users/joshskeen/.oh-my-zsh/plugins/z/z.sh
+rvm alias create default 2.1.1 > /dev/null 2>&1
+rvm --default use 2.1.1 > /dev/null 2>&1
+PATH=/usr/local/bin:$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # This loads RVM into a shell session.
