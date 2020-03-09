@@ -1,119 +1,143 @@
-###########################
-#  Configuration
-###########################
+# https://github.com/seebi/tmux-colors-solarized/blob/master/tmuxcolors-256.conf
+#
+set-option -g default-command "reattach-to-user-namespace -l zsh"
 
-# use 256 term for pretty colors
-set -g default-terminal "screen-256color"
+set-option -g status-bg colour235 #base02
+set-option -g status-fg colour136 #yellow
+#set-option -g status-attr default
+bind '"' split-window -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+bind c new-window -c "#{pane_current_path}" 
 
-# increase scroll-back history
-set -g history-limit 5000
+# set window split
+bind-key v split-window -h -c "#{pane_current_path}"
+bind-key b split-window -c "#{pane_current_path}"
+# default window title colors
+#set-window-option -g window-status-fg colour244 #base0
+#set-window-option -g window-status-bg default
+#set-window-option -g window-status-attr dim
 
-# use vim key bindings
-setw -g mode-keys vi
+# active window title colors
+#set-window-option -g window-status-current-fg colour166 #orange
+#set-window-option -g window-status-current-bg default
+#set-window-option -g window-status-current-attr bright
 
-# disable mouse
-setw -g mode-mouse off
+# pane border
+#set-option -g pane-border-fg colour235 #base02
+#set-option -g pane-active-border-fg colour240 #base01
 
-# decrease command delay (increases vim responsiveness)
-set -sg escape-time 1
+# message text
+#set-option -g message-bg colour235 #base02
+#set-option -g message-fg colour166 #orange
 
-# increase repeat time for repeatable commands
-set -g repeat-time 1000
+# pane number display
+set-option -g display-panes-active-colour colour33 #blue
+set-option -g display-panes-colour colour166 #orange
+# clock
+set-window-option -g clock-mode-colour green #green
 
-# start window index at 1
+
+set -g status-interval 1
+set -g status-justify centre # center align window list
+set -g status-left-length 20
+set -g status-right-length 140
+set -g status-left '#[fg=green]#H #[fg=black]• #[fg=green,bright]#(uname -r | cut -c 1-6)#[default]'
+set -g status-right '#[fg=green,bg=default,bright]#(tmux-mem-cpu-load -i 1) #[fg=red,dim,bg=default]#(uptime | cut -f 4-5 -d " " | cut -f 1 -d ",") #[fg=white,bg=default]%a%l:%M:%S %p#[default] #[fg=blue]%Y-%m-%d'
+
+# C-b is not acceptable -- Vim uses it
+set-option -g prefix C-a
+bind-key C-a last-window
+
+# Start numbering at 1
 set -g base-index 1
 
-# start pane index at 1
-setw -g pane-base-index 1
+# Allows for faster key repetition
+set -s escape-time 0
 
-# highlight window when it has new activity
+# Rather than constraining window size to the maximum size of any client 
+# connected to the *session*, constrain window size to the maximum size of any 
+# client connected to *that window*. Much more reasonable.
+setw -g aggressive-resize on
+
+# Allows us to use C-a a <command> to send commands to a TMUX session inside 
+# another TMUX session
+bind-key a send-prefix
+
+# Activity monitoring
 setw -g monitor-activity on
 set -g visual-activity on
 
-# re-number windows when one is closed
-set -g renumber-windows on
+# hjkl pane traversal
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
 
-# enable pbcopy and pbpaste
-# https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard/blob/master/README.md
-set-option -g default-command "reattach-to-user-namespace -l zsh"
+bind < resize-pane -L 10
+bind > resize-pane -R 10
+bind - resize-pane -D 10
+bind + resize-pane -U 10
+# set to main-horizontal, 60% height for main pane
+bind m set-window-option main-pane-height 60\; select-layout main-horizontal
 
-###########################
-#  Key Bindings
-###########################
+bind-key C command-prompt -p "Name of new window: " "new-window -n '%%'"
 
-# tmux prefix
-unbind C-b
-set -g prefix C-j
+bind-key C-o select-pane -L
 
-# copy with 'enter' or 'y' and send to mac os clipboard: http://goo.gl/2Bfn8
-unbind -t vi-copy Enter
-bind-key -t vi-copy Enter copy-pipe "reattach-to-user-namespace pbcopy"
-bind-key -t vi-copy y copy-pipe "reattach-to-user-namespace pbcopy"
+bind-key -n C-Left send-keys M-b
+bind-key -n C-Right send-keys M-f
 
-# create 'v' alias for selecting text
-bind-key -t vi-copy v begin-selection
+# reload config
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded..."
 
-# paste
-unbind C-p
-bind C-p paste-buffer
+# auto window rename
+set-window-option -g automatic-rename
 
-# window splitting
-unbind %
-bind | split-window -h
-unbind '"'
-bind - split-window -v
+# rm mouse mode fail
+#set -g mode-mouse off
 
-# resize panes
-bind -r H resize-pane -L 5
-bind -r J resize-pane -D 5
-bind -r K resize-pane -U 5
-bind -r L resize-pane -R 5
+# color
+set -g default-terminal "screen-256color"
 
-# quickly switch panes
-unbind ^J
-bind ^J select-pane -t :.+
-bind-key N command-prompt 'rename-window %%'
+# status bar
 
-# force a reload of the config file
-unbind r
-bind r source-file ~/.tmux.conf \; display "Reloaded!"
+# pip install --user git+git://github.com/powerline/powerline
+if-shell 'test -f /Users/joshskeen/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf' 'source-file /Users/joshskeen/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf'
 
-###########################
-# Status Bar
-###########################
+# [sudo] pip install git+git://github.com/powerline/powerline
+if-shell 'test -f /Users/joshskeen/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf' 'source-file /Users/joshskeen/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf'
 
-# enable UTF-8 support in status bar
-set -g status-utf8 on
+# [sudo] pip install git+git://github.com/powerline/powerline
+if-shell 'test -f /Users/joshskeen/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf' 'source-file /Users/joshskeen/Library/Python/2.7/lib/python/site-packages/powerline/bindings/tmux/powerline.conf'
+# using python3.3
+if-shell 'test -f /usr/local/lib/python3.3/dist-packages/powerline/bindings/tmux/powerline.conf' 'source-file /usr/local/lib/python3.3/dist-packages/powerline/bindings/tmux/powerline.conf'
+# python 3.4?
+# if-shell 'test -f /usr/local/lib/python3.4/dist-packages/powerline/bindings/tmux/powerline.conf' 'source-file /usr/local/lib/python3.4/dist-packages/powerline/bindings/tmux/powerline.conf'
+run-shell "tmux set-environment -g TMUX_VERSION_MAJOR $(tmux -V | cut -d' ' -f2 | cut -d'.' -f1 | sed 's/[^0-9]*//g')"
+run-shell "tmux set-environment -g TMUX_VERSION_MINOR $(tmux -V | cut -d' ' -f2 | cut -d'.' -f2 | sed 's/[^0-9]*//g')"
 
-# set refresh interval for status bar
-set -g status-interval 30
+if-shell '[$TMUX_VERSION_MAJOR -gt 1 -o \( $TMUX_VERSION_MAJOR -eq 1 -a $TMUX_VERSION_MINOR -ge 8 \)]' 'unbind c; bind c new-window -c "#{pane_current_path}"'
+if-shell '[$TMUX_VERSION_MAJOR -gt 1 -o \( $TMUX_VERSION_MAJOR -eq 1 -a $TMUX_VERSION_MINOR -ge 8 \)]' 'unbind s; bind s split-window -v -c "#{pane_current_path}"'
+if-shell '[$TMUX_VERSION_MAJOR -gt 1 -o \( $TMUX_VERSION_MAJOR -eq 1 -a $TMUX_VERSION_MINOR -ge 8 \)]' "unbind '\"'; bind '\"' split-window -v -c '#{pane_current_path}'"
+if-shell '[$TMUX_VERSION_MAJOR -gt 1 -o \( $TMUX_VERSION_MAJOR -eq 1 -a $TMUX_VERSION_MINOR -ge 8 \)]' 'unbind v; bind v split-window -h -c "#{pane_current_path}"'
+if-shell '[$TMUX_VERSION_MAJOR -gt 1 -o \( $TMUX_VERSION_MAJOR -eq 1 -a $TMUX_VERSION_MINOR -ge 8 \)]' 'unbind %; bind % split-window -h -c "#{pane_current_path}"'
 
-# center the status bar
-set -g status-justify left
+set-option -g default-terminal "screen-256color"
 
-# show session, window, pane in left status bar
-set -g status-left-length 40
-set -g status-left '#[fg=green]#S#[fg=blue] #I:#P#[default]'
+setw -g mode-keys vi
 
-# show hostname, date, time, and battery in right status bar
-set-option -g status-right '#[fg=green]#H#[default] %m/%d/%y %I:%M\
- #[fg=red]#(battery discharging)#[default]#(battery charging)'
+unbind p
+bind p paste-buffer
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
 
-###########################
-# Colors
-###########################
-
-# color status bar
-set -g status-bg colour235
-set -g status-fg white
-
-# highlight current window
-set-window-option -g window-status-current-fg black
-set-window-option -g window-status-current-bg green
-
-# set color of active pane
-set -g pane-border-fg colour235
-set -g pane-border-bg black
-set -g pane-active-border-fg green
-set -g pane-active-border-bg black
-set-option -g allow-rename off
+bind-key -n C-S-Left swap-window -t -1
+bind-key -n C-S-Right swap-window -t +1
+bind -n M-f move-pane -t '.-'
+bind M-f move-pane -t '.-'
+bind -n M-r move-pane -h -t '.-'
+bind M-r move-pane -h -t '.-'
+set -g window-status-format '#I:#(pwd="#{pane_current_path}"; echo ${pwd####*/})#F'
+set -g window-status-current-format '#I:#(pwd="#{pane_current_path}"; echo ${pwd####*/})#F'
+set-option -g status-interval 1
+bind -n C-k send-keys -R \; send-keys C-l \; clear-history
